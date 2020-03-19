@@ -1,0 +1,43 @@
+
+public class Test {
+
+	public static void main(String[] args) {
+
+		//Constructor is invoked and creates a new object
+		//called p1 - "point1"
+		My3DPoint p1 = new My3DPoint();
+		My3DPoint p2 = new My3DPoint();
+		
+		System.out.println("Initial Values");
+		System.out.println("p1.x = " + p1.x);
+		System.out.println("p1.y = " + p1.y);
+		System.out.println("p1.z = " + p1.z);
+		System.out.println("");
+		System.out.println("p2.x = " + p2.x);
+		System.out.println("p2.x = " + p2.y);
+		System.out.println("p2.x = " + p2.z);
+		
+		//Changing object values
+		p1.x = 22.5;
+		p1.y = 101.4;
+		p1.z = 14.5;
+		
+		p2.x = 43.2;
+		p2.y = 55.4;
+		p2.z = 99.4;
+		
+		System.out.println("\nValues Updated");
+		System.out.println("p1.x = " + p1.x);
+		System.out.println("p1.y = " + p1.y);
+		System.out.println("p1.z = " + p1.z);
+		System.out.println("");
+		System.out.println("p2.x = " + p2.x);
+		System.out.println("p2.x = " + p2.y);
+		System.out.println("p2.x = " + p2.z);
+		
+		
+		
+
+	}
+
+}

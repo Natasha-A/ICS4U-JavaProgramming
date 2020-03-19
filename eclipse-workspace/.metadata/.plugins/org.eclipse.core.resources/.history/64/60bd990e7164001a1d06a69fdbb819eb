@@ -1,0 +1,8 @@
+
+public class ClassE1_Student {
+	String name;
+	int studentNumber;
+	int grade;
+	
+
+}

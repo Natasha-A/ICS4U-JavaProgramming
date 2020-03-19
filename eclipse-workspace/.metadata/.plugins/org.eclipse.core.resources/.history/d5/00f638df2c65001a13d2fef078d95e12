@@ -1,0 +1,25 @@
+
+public class My2DPoint_V2 {
+	double x,y,z;
+	
+	public My2DPoint_V2() {
+		x = 3;
+		y = 5;
+		z = 7;
+		
+	}
+
+	//Non-Parameterized constructor - Does not have any parameters, default values hardcoded
+	public My2DPoint_V2(double dataOne) {
+		x = dataOne;
+		
+	}
+	
+	//Parameterized constructor - constructor with parameters used at time the object is
+	//created 
+	public My2DPoint_V2(double dataOne, double dataTwo) {
+		x = dataOne;
+		y = dataTwo;
+		
+	}
+}

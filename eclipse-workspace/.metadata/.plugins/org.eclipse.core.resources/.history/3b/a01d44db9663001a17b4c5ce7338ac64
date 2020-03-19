@@ -1,0 +1,15 @@
+
+public class TestProgramForExampleClass {
+
+	public static void main(String[] args) {
+		//1) Instance of Class:
+		ExampleClass variable1 = new ExampleClass(); //this 'new' will run the constructor
+		//2) Optionally, Instance of Class:
+		/*
+		 * ExampleClass variable1;
+		 * variable1 = new ExampleClass();
+		 */
+
+	}
+
+}

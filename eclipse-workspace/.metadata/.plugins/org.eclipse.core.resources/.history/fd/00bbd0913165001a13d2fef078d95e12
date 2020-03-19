@@ -1,0 +1,12 @@
+
+public class My2DPoint_TestProgram {
+
+	public static void main(String[] args) {
+		My2DPoint_V2 variable1 = new My2DPoint_V2(); 
+		My2DPoint_V2 variable3 = new My2DPoint_V2(); 
+		
+		System.out.println(variable1.y);
+
+	}
+
+}
