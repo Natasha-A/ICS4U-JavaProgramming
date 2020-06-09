@@ -16,7 +16,19 @@ public class Student {
 		courseTwo = course2;
 		courseThree = course3;
 		courseFour = course4;
-		
+		studentCounter++;
+
+	}
+	
+	public Student(String course1, String course2, String course3, String course4) {
+		studentName = "NA";
+		studentGrade = "NA";
+		courseOne = course1;
+		courseTwo = course2;
+		courseThree = course3;
+		courseFour = course4;
+		studentCounter++;
+
 	}
 	
 	// Display student info 
