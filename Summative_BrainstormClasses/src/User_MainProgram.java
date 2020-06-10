@@ -1,5 +1,8 @@
 import java.io.IOException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 
 
 public class User_MainProgram {
@@ -13,6 +16,7 @@ public class User_MainProgram {
 			+ "Summative_BrainstormClasses/src/assessments.csv";
 				
 	Classroom.readFiles(studentsFile, assessmentsFile);
+	
 	
 	//Classroom.studentsObjects.get(0).studentInfo();
 	//System.out.println(Classroom.studentsObjects.size());
@@ -33,9 +37,26 @@ public class User_MainProgram {
 	//System.out.println(classroom_English.classList.size());
 	//System.out.println(classroom_English.teacher.name);
 	
-	Classroom.deleteStudent();
-	Classroom.writeFiles(studentsFile, assessmentsFile);
+	//Classroom.deleteStudent();
+	//Classroom.writeFiles(studentsFile, assessmentsFile);
+	//classroom_Math.addAssessment();
+	System.out.println(Assessment.addDescription());
 
+	
+/*
+    Date now = new Date(0);
+
+    SimpleDateFormat simpleDateformat = new SimpleDateFormat("E"); // the day of the week abbreviated
+    System.out.println(simpleDateformat.format(now));
+
+    simpleDateformat = new SimpleDateFormat("EEEE"); // the day of the week spelled out completely
+    System.out.println(simpleDateformat.format(now));
+
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(now);
+    System.out.println(calendar.get(Calendar.DAY_OF_WEEK)); // the day of the week in numerical format
+
+*/
 
 	// IDEAS FOR MAIN PROGRAM 
 	// Programmer inputs classroom which then assigns values for each type. 

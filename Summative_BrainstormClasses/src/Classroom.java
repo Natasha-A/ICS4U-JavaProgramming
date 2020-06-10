@@ -105,8 +105,7 @@ public class Classroom {// Feature class - manages schedules for class
 					System.out.println("Index error - Could not add Assessment.");
 					e.printStackTrace();
 				}		
-			}
-			
+			}	
 		}
     
     // **** WRITING TO FILE *****
@@ -187,6 +186,13 @@ public class Classroom {// Feature class - manages schedules for class
     	}
     } 
     
+    public static void displayStudentsList() {
+        System.out.println("\n------ Students List -----");
+        	for (int index=0; index < studentsObjects.size(); index++) {
+        		System.out.println((index+1)+ ": "+ studentsObjects.get(index).studentName);
+        	}
+    	}
+    
     public static void addStudent() {
     	System.out.println("\n------ Add Student -----");
 	    String name = Student.enterName();
@@ -198,37 +204,56 @@ public class Classroom {// Feature class - manages schedules for class
 	    		courses.get(2), courses.get(3));
 	    
 	    studentsObjects.add(student);  
-	    System.out.println();
     }
     
-    public static void displayStudentsList() {
-    // String str2 = String.format("|%10d|", 101);  // Specifying length of integer  
-    // System.out.println(str2);
-    System.out.println("\n------ Students List -----");
-    	for (int index=0; index < studentsObjects.size(); index++) {
-    		System.out.println((index+1)+ ": "+ studentsObjects.get(index).studentName);
-    	}
-    }
     public static void deleteStudent() {
     	int lengthList = studentsObjects.size();
     	displayStudentsList();
-    	Scanner enterStudentIndex = new Scanner(System.in);
-    	System.out.println("Select # to delete student:");
-    	String studentIndex = enterStudentIndex.nextLine();
     	boolean checkInput = true;
     	
     	while (checkInput) {
+    		Scanner enterStudentIndex = new Scanner(System.in);
+        	System.out.println("Select index # to delete student:");
+        	String studentIndex = enterStudentIndex.nextLine();
+        	
+        	try {
+        	
     		if (0 < Integer.parseInt(studentIndex) && 
     				Integer.parseInt(studentIndex) <= (lengthList+1)) {
-    			System.out.println("Deleted! " + studentsObjects.get((Integer.parseInt(studentIndex)-1)).studentName);
+    			System.out.println("Deleted! " + studentsObjects.
+    					get((Integer.parseInt(studentIndex)-1)).studentName);
     			studentsObjects.remove((Integer.parseInt(studentIndex)-1));
     			checkInput = false;
     		} else {
     			System.out.println("Incorrect index.");
     			checkInput = true;
     		}
-    		
+        	} catch (NumberFormatException e) {
+        		System.out.println("Incorrect input.");
+        		checkInput = true;
+        	}
     	}
+    }
+    // save changes at this point or at end? choose to save all ...
+    public void addAssessment() { // gets added to entire assessments 
+    	// database, then read into as assesmentsForClass() based on class type 
+    	System.out.println("\n------ Add Assessment ------");
+    	try {
+			String date = Assessment.enterDate();
+			String course = this.teacher.subject;
+			String teacher = this.teacher.name;
+			String type = Assessment.addType();
+			String description = Assessment.addDescription();
+			
+			Assessment assessment = new Assessment(date, course, teacher,
+					type, description);
+			assessmentsObjects.add(assessment);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+	}
+    	
+    	
     	
     }
 }

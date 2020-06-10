@@ -24,7 +24,7 @@ public class Assessment {
 			description = descripVal;
 	}
 	
-	// Overloading constructor 
+	// Overloading constructors 
 	public Assessment(String courseVal, String teacherVal, String typeVal, String descripVal) {
 		date = formattedDateNextWeek; 
 		course = courseVal;
