@@ -40,7 +40,26 @@ class Teacher {
 			} else {
 				System.out.println("Incorrect username or password, try again.");
 			}
-		}		
-		
+		}
 	}
+		
+	    // save changes at this point or at end? choose to save all ...
+	 public void addAssessment() throws ClassNotFoundException { // gets added to entire assessments 
+	    	// database, then read into as assesmentsForClass() based on class type 
+	    	System.out.println("\n------ Add Assessment ------");
+	    	try {
+				String date = Assessment.enterDate();
+				String course = this.subject;
+				String teacher = this.name;
+				String type = Assessment.addType();
+				String description = Assessment.addDescription();
+				
+				Assessment assessment = new Assessment(date, course, teacher,
+						type, description);
+				Classroom.assessmentsObjects.add(assessment);
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	    }
 }

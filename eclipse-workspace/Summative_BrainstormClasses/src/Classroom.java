@@ -16,6 +16,8 @@ public class Classroom {// Feature class - manages schedules for class
 	static List<Assessment> assessmentsObjects = new ArrayList<Assessment>(); // stores as individual assessments 
 	public Teacher teacher; // teacher for classroom  
     public List<Student> classList = new ArrayList<Student>();  // Students for each class 
+    public List<Assessment> assessmentsForClassList = new ArrayList<Assessment>();  // assessments for each class 
+
     public static String[] coursesGrade11 = {"SPH3U0", "FSP3U0", "ICS3U0", "MCR3U0",
                                                      "ENG3C0", "PAL3O0", "ENG3U0", "SCH3U0",
                                                      "TTJ3C0", "AWP3O0", "TCJ3C0", "AVI3M0",
@@ -105,8 +107,7 @@ public class Classroom {// Feature class - manages schedules for class
 					System.out.println("Index error - Could not add Assessment.");
 					e.printStackTrace();
 				}		
-			}
-			
+			}	
 		}
     
     // **** WRITING TO FILE *****
@@ -187,6 +188,13 @@ public class Classroom {// Feature class - manages schedules for class
     	}
     } 
     
+    public static void displayStudentsList() {
+        System.out.println("\n------ Students List -----");
+        	for (int index=0; index < studentsObjects.size(); index++) {
+        		System.out.println((index+1)+ ": "+ studentsObjects.get(index).studentName);
+        	}
+    	}
+    
     public static void addStudent() {
     	System.out.println("\n------ Add Student -----");
 	    String name = Student.enterName();
@@ -196,45 +204,152 @@ public class Classroom {// Feature class - manages schedules for class
 	    Student student = new Student(name,
 	    		grade, courses.get(0), courses.get(1),
 	    		courses.get(2), courses.get(3));
-	    
 	    studentsObjects.add(student);  
-	    System.out.println();
     }
     
-    public static void displayStudentsList() {
-    // String str2 = String.format("|%10d|", 101);  // Specifying length of integer  
-    // System.out.println(str2);
-    System.out.println("\n------ Students List -----");
-    	for (int index=0; index < studentsObjects.size(); index++) {
-    		System.out.println((index+1)+ ": "+ studentsObjects.get(index).studentName);
-    	}
-    }
     public static void deleteStudent() {
     	int lengthList = studentsObjects.size();
     	displayStudentsList();
-    	Scanner enterStudentIndex = new Scanner(System.in);
-    	System.out.println("Select # to delete student:");
-    	String studentIndex = enterStudentIndex.nextLine();
     	boolean checkInput = true;
     	
     	while (checkInput) {
+    		Scanner enterStudentIndex = new Scanner(System.in);
+        	System.out.println("Select index # to delete student:");
+        	String studentIndex = enterStudentIndex.nextLine();
+        	
+        	try {
+        	
     		if (0 < Integer.parseInt(studentIndex) && 
     				Integer.parseInt(studentIndex) <= (lengthList+1)) {
-    			System.out.println("Deleted! " + studentsObjects.get((Integer.parseInt(studentIndex)-1)).studentName);
+    			System.out.println("Deleted! " + studentsObjects.
+    					get((Integer.parseInt(studentIndex)-1)).studentName);
     			studentsObjects.remove((Integer.parseInt(studentIndex)-1));
     			checkInput = false;
     		} else {
     			System.out.println("Incorrect index.");
     			checkInput = true;
     		}
-    		
+        	} catch (NumberFormatException e) {
+        		System.out.println("Incorrect input.");
+        		checkInput = true;
+        	}
+    	}
+    }
+    
+    // displays entire assessments for classes 
+    public static void displayAssessmentsList() {
+        System.out.println("\n------ Assessments List -----");
+        	for (int index=0; index < assessmentsObjects.size(); index++) {
+        		System.out.println((index+1)+ ": "
+        				+ assessmentsObjects.get(index).date + ", "
+        				+ assessmentsObjects.get(index).course + ", "
+        				+ assessmentsObjects.get(index).teacher + ", "
+        				+ assessmentsObjects.get(index).type + ": "
+        				+ assessmentsObjects.get(index).description
+        				);
+        	}
+    	}
+    
+    public void displayStudentsInClass() {
+    	List<Student> studentsOfClassList = this.classList;
+    	
+    	if (this.classList.size() == 0) {
+    		this.buildClass();
     	}
     	
+    	System.out.println("------- Students in " + this.teacher.subject + " ------");
+    	for (int x=0; x < studentsOfClassList.size(); x++) {
+    		System.out.println(x+1+ ": "
+    				+ studentsOfClassList.get(x).studentName + ", "
+    				+ studentsOfClassList.get(x).studentGrade + ", "
+    				+ studentsOfClassList.get(x).courseOne + ", "
+    				+ studentsOfClassList.get(x).courseTwo + ", "
+    				+ studentsOfClassList.get(x).courseThree + ", "
+    				+ studentsOfClassList.get(x).courseFour
+    				);
+    		}
+    	}
+    
+    public void displayAssessmentsForClass() {	
+    	String subject = this.teacher.subject;
+    	
+    	if (this.assessmentsForClassList.size() == 0) {    		
+    		for (int index=0; index < assessmentsObjects.size(); index++) {
+        		if (assessmentsObjects.get(index).course.equals(subject)) {
+        			this.assessmentsForClassList.add(assessmentsObjects.get(index));
+        		}
+        	}
+    	}
+    
+    		 System.out.println("\n------ Assessments in " + subject + " ------");
+          	for (int x=0; x < assessmentsForClassList.size(); x++) {
+          		System.out.println((x+1)+ ": "
+          				+ assessmentsForClassList.get(x).date + ", "
+        				+ assessmentsForClassList.get(x).course + ", "
+        				+ assessmentsForClassList.get(x).teacher + ", "
+        				+ assessmentsForClassList.get(x).type + ": "
+        				+ assessmentsForClassList.get(x).description);
+          	}
     }
-}
-
+    
+    public void addAssessment() { // gets added to entire assessments 
+    	// database, then read into as assesmentsForClass() based on class type 
+    	System.out.println("\n------ Add Assessment ------");
+    	try {
+			String date = Assessment.enterDate();
+			String course = this.teacher.subject;
+			String teacher = this.teacher.name;
+			String type = Assessment.addType();
+			String description = Assessment.addDescription();
 			
-		
+			Assessment assessment = new Assessment(date, course, teacher,
+					type, description);
+			assessmentsObjects.add(assessment);
 
-	
+		} catch (IOException e) {
+			e.printStackTrace();
+	 }
+  }
+    	
+    public void deleteAssessmentForClass() {
+    	//this.displayAssessmentsForClass();
+    	int listLength = assessmentsForClassList.size();
+    	boolean checkInput = true;
+		int intAssessmentIndex = 0;
+		
+		this.displayAssessmentsForClass();
+
+    	
+    	while (checkInput) {
+    		try {
+    			Scanner enterIndex = new Scanner(System.in);
+    			System.out.println("Enter index # to delete assessment:");
+    			String assesmentIndex = enterIndex.nextLine();
+    			intAssessmentIndex = Integer.parseInt(assesmentIndex);
+    			
+    			if (0 < intAssessmentIndex && intAssessmentIndex <= (listLength+1)) {
+    				Assessment toDelete = assessmentsForClassList.get(intAssessmentIndex-1);
+            		checkInput = false;
+            		System.out.println("Deleted!"); // not from list, from entire database
+            		
+            		//use .equals 
+            		for (int list_A=0; list_A < assessmentsObjects.size(); list_A++) {
+            			if (assessmentsObjects.get(list_A).equals(toDelete)) {
+            				assessmentsObjects.remove(list_A);
+            			}
+            		}
+    			} else {
+    				System.out.println("Wrong!");
+            		checkInput = true;
+    			}
+     				
+    		} catch (NumberFormatException e) {
+        		System.out.println("Incorrect input.");
+        		checkInput = true;
+        	}
+		
+    	}
+    }
+    
+ }
 	
