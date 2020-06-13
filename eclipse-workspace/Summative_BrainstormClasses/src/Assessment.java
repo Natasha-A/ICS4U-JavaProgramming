@@ -2,18 +2,23 @@ import java.io.IOException;
 import java.time.LocalDateTime; // Import the LocalDateTime class
 import java.time.format.DateTimeFormatter; // Import the DateTimeFormatter class
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 
 
-public class Assessment {
+public class Assessment  {
 	// all assessments for all classes
     static LocalDateTime today = LocalDateTime.now();
     static LocalDateTime nextWeek = today.plusDays(7);
     static DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E MMM dd yyyy");
     static String formattedDateNextWeek = nextWeek.format(myFormatObj);
-
 	public String date;
 	public String course;
 	public String teacher;
@@ -68,8 +73,7 @@ public class Assessment {
 					Calendar cal = Calendar.getInstance();
 				    int lastDateOfMonth = cal.getActualMaximum(Calendar.DATE);
 				    DateTimeFormatter numDateFormat = DateTimeFormatter.ofPattern("e");
-				    //
-
+				    
 					for (int indexDate=1; indexDate <= (lastDateOfMonth-dateToday); indexDate++) {
 						LocalDateTime nextDay = today.plusDays(indexDate);
 					    String formattedDate = nextDay.format(numDateFormat); // display only date 
@@ -83,7 +87,7 @@ public class Assessment {
 						
 					 }		
 					// Display valid dates (weekdays)
-					System.out.println("\n------ Valid Dates -----");
+					System.out.println("\n------ Valid Dates for " + today.getMonth() + " -----");
 				    for (int index=0; index < validDates.size(); index++) {
 				    	System.out.println((index+1)+ ": "+ validDates.get(index));
 				    }
@@ -199,9 +203,120 @@ public class Assessment {
 				System.out.println("Entry unrecognized.");
 			}
 		}
-		return description; // truncate longer description if necessary
+		return description;
 	}
+	
+	public static void viewUpcomingAssessments(Classroom classroom)  {
+		int listLength = classroom.assessmentsForClassList.size();
+		// converts dates from assessments as string list values 
+		List<String> datesListAsString = new ArrayList<String>();
+		for (int index = 0; index < listLength; index++) {
+			datesListAsString.add(classroom.assessmentsForClassList.get(index).date);
+		}
+		
+		System.out.println(datesListAsString);
+		List<List<String>> slicedDatesList = new ArrayList<List<String>>(); 
+		
+		for (int indexDate = 0; indexDate < datesListAsString.size(); indexDate++) {
+			String line = datesListAsString.get(indexDate);
+			List<String> slicedLine = Arrays.asList(line.split(" ")); // split line by spaces 
+			slicedDatesList.add(slicedLine);
+		}
+		
+		int year = 0;
+		int month = 0;
+		int day = 0;
+		int hour = 0;
+		int min = 0;
+		List<LocalDateTime> dateTimeList = new ArrayList<LocalDateTime>();
+		
+		for (int k = 0; k < slicedDatesList.size(); k++) {
+			for (int j=0; j < slicedDatesList.get(k).size(); j++) {
+				year = today.getYear();
+				// input month in string format i.e June, July, etc.
+				month = Assessment
+						.convertToNumericalMonth(slicedDatesList.get(k).get(1));
+				day = Integer.parseInt(slicedDatesList.get(k).get(2));
+				
+			}
+			dateTimeList.add(LocalDateTime.of(year, month, day, hour, min));
+		}	
+		
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("E MMM dd yyyy");
+		// LocalDateTime  internally having Comparable interface no need additional Comparator
+		Collections.sort(dateTimeList);
+		//System.out.println(dateTimeList.get(0).format(dateFormatter));
 
+		List<List<String>> upComingInfoList = new ArrayList<List<String>>(); 
+		System.out.println("------ Upcoming Assessments in " +
+		classroom.teacher.subject + " for " + today.getMonth() + " ------");
+		
+
+		for(LocalDateTime dateTime: dateTimeList) {
+			// ensure that displayed upcoming assessments are dates ahead of 'today' date 
+		    String formattedDetailDate = dateTime.format(dateFormatter);
+		    String totalInfo = null;
+		    for (int index = 0; index < listLength; index++) {
+		    	Assessment assessment = classroom.assessmentsForClassList.get(index);
+		    	if (formattedDetailDate.equals
+		    			(assessment.date)) {
+		    		totalInfo = formattedDetailDate + ", " +
+		    						   assessment.course + ", " +
+		    						   assessment.teacher + ", " +
+		    						   assessment.type + ": " +
+		    						   assessment.description;
+
+		    	}	
+		    }
+		    if (today.getDayOfMonth() < dateTime.getDayOfMonth()) {
+		    	System.out.println(totalInfo);
+		    }
+		}	
+	}
+	
+	public static int convertToNumericalMonth(String month) {
+		int numMonth = 0;
+		switch (month) {
+			case "Jan.": 
+				numMonth = 1;
+				break;
+			case "Feb.":
+				numMonth = 2;
+				break;
+			case "Mar.":
+				numMonth = 3;
+				break;
+			case "Apr.":
+				numMonth = 4;
+				break;
+			case "May.":
+				numMonth = 5;
+				break;
+			case "Jun.":
+				numMonth = 6; 
+				break;
+			case "July.":
+				numMonth = 7; 
+				break;
+			case "Aug.":
+				numMonth = 8; 
+				break;
+			case "Sep.":
+				numMonth = 9;
+				break;
+			case "Oct.":
+				numMonth = 10;
+				break;
+			case "Nov.":
+				numMonth = 11;
+				break;
+			case "Dec.":
+				numMonth = 12;
+				break;
+		}
+		return numMonth;
+	}
+	
+	
 }
 
-// course = self.teacher.course

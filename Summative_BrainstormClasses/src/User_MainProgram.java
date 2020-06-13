@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.sql.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -22,6 +23,7 @@ public class User_MainProgram {
 	//System.out.println(Classroom.studentsObjects.size());
 	//System.out.println(Classroom.studentsObjects);
 		
+	// as soon as user enters, create class!!
 	Classroom classroom_Math = new Classroom();
 	Classroom classroom_Physics = new Classroom();
 	Classroom classroom_English = new Classroom();
@@ -32,31 +34,36 @@ public class User_MainProgram {
 	//System.out.println(Classroom.assessmentsList);
 	//System.out.println(Classroom.assessmentsObjects.get(0).date);
 	
-	//classroom_Math.buildClass();
-	//classroom_English.buildClass();
+	classroom_Math.buildClass();
+	classroom_Physics.buildClass();
+	classroom_Math.displayAssessmentsForClass();	//classroom_English.buildClass();
 	//System.out.println(classroom_English.classList.size());
 	//System.out.println(classroom_English.teacher.name);
 	
 	//Classroom.deleteStudent();
 	//Classroom.writeFiles(studentsFile, assessmentsFile);
-	//classroom_Math.addAssessment();
-	System.out.println(Assessment.addDescription());
-
+	//classroom_Math.displayStudentsInClass();
+	//classroom_Math.deleteAssessment();
+	//classroom_Physics.displayStudentsInClass();
 	
-/*
-    Date now = new Date(0);
+	//System.out.println(classroom_Math.classList.size());
 
-    SimpleDateFormat simpleDateformat = new SimpleDateFormat("E"); // the day of the week abbreviated
-    System.out.println(simpleDateformat.format(now));
+	//System.out.println(classroom_Physics.classList.size());
+	//classroom_Math.displayAssessmentsForClass();
 
-    simpleDateformat = new SimpleDateFormat("EEEE"); // the day of the week spelled out completely
-    System.out.println(simpleDateformat.format(now));
+	//classroom_Math.deleteAssessmentForClass();
+	//classroom_Math.addAssessment();
+	//Classroom.displayAssessmentsList();
+			
+	//Classroom.writeFiles(studentsFile, assessmentsFile);
+	
+	Assessment.viewUpcomingAssessments(classroom_Math);
+	//classroom_Math.addAssessment();
+	
+	//System.out.println(Classroom.assessmentsObjects.get(8).date);
+	
+	//Classroom.writeFiles(studentsFile, assessmentsFile);
 
-    Calendar calendar = Calendar.getInstance();
-    calendar.setTime(now);
-    System.out.println(calendar.get(Calendar.DAY_OF_WEEK)); // the day of the week in numerical format
-
-*/
 
 	// IDEAS FOR MAIN PROGRAM 
 	// Programmer inputs classroom which then assigns values for each type. 
@@ -71,7 +78,8 @@ public class User_MainProgram {
 		 *IDEA FOR USER DRIVEN PROGRAM --- wait it isn't a class of objects :(
 		 *make use of self for each 'classroom object' */ 
 
-	
+	// NOTES  - any changes to will only be saved once write() at end....
+	// will not reflect changes until saved
 		
 	}
 

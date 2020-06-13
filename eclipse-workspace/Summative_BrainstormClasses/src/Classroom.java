@@ -3,8 +3,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,13 +20,13 @@ public class Classroom {// Feature class - manages schedules for class
 	public Teacher teacher; // teacher for classroom  
     public List<Student> classList = new ArrayList<Student>();  // Students for each class 
     public List<Assessment> assessmentsForClassList = new ArrayList<Assessment>();  // assessments for each class 
-
+    static LocalDateTime today = LocalDateTime.now();
     public static String[] coursesGrade11 = {"SPH3U0", "FSP3U0", "ICS3U0", "MCR3U0",
                                                      "ENG3C0", "PAL3O0", "ENG3U0", "SCH3U0",
                                                      "TTJ3C0", "AWP3O0", "TCJ3C0", "AVI3M0",
                                                      "SVN3M0", "HNC3C0", "SPP3OF", "CHW3M0",
                                                      "SBI3U0", "ADA3M0", "MEL3E0", "TGJ3M0",
-                                                     "FSF3U0", "CGF3M0", "PPL3OM"};
+                                                     "FSF3U0", "CGF3M0", "PPL3OM", "BMI3C0"};
     
     // READING FILES
     public static void readFiles(String studentsDirectory, String assessmentsDirectory) throws IOException {
@@ -281,7 +284,8 @@ public class Classroom {// Feature class - manages schedules for class
         	}
     	}
     
-    		 System.out.println("\n------ Assessments in " + subject + " ------");
+    		 System.out.println("\n------ Assessments in " + subject 
+    				 + " for "+ today.getMonth() +" ------");
           	for (int x=0; x < assessmentsForClassList.size(); x++) {
           		System.out.println((x+1)+ ": "
           				+ assessmentsForClassList.get(x).date + ", "
@@ -294,6 +298,7 @@ public class Classroom {// Feature class - manages schedules for class
     
     public void addAssessment() { // gets added to entire assessments 
     	// database, then read into as assesmentsForClass() based on class type 
+    	
     	System.out.println("\n------ Add Assessment ------");
     	try {
 			String date = Assessment.enterDate();
@@ -301,16 +306,17 @@ public class Classroom {// Feature class - manages schedules for class
 			String teacher = this.teacher.name;
 			String type = Assessment.addType();
 			String description = Assessment.addDescription();
-			
+
 			Assessment assessment = new Assessment(date, course, teacher,
 					type, description);
 			assessmentsObjects.add(assessment);
 
 		} catch (IOException e) {
 			e.printStackTrace();
-	 }
+		  }
+		System.out.println("The assessment has been recorded.");
   }
-    	
+    
     public void deleteAssessmentForClass() {
     	//this.displayAssessmentsForClass();
     	int listLength = assessmentsForClassList.size();
@@ -339,7 +345,7 @@ public class Classroom {// Feature class - manages schedules for class
             			}
             		}
     			} else {
-    				System.out.println("Wrong!");
+    				System.out.println("Incorrect index value.");
             		checkInput = true;
     			}
      				
@@ -347,9 +353,94 @@ public class Classroom {// Feature class - manages schedules for class
         		System.out.println("Incorrect input.");
         		checkInput = true;
         	}
-		
     	}
     }
+    
+    public void viewMonthlySchedule() {
+    	this.displayStudentsInClass();
+    	int classLength = this.classList.size();
+    	int assessmentsLength = Classroom.assessmentsObjects.size();
+    	List<Assessment> subjectAssessmentsForClass = new ArrayList<Assessment>(); 
+    	
+    	List<String> subjectAssessmentsForClassSTRINGS = new ArrayList<String>(); 
+
+    	for (int studentIdx=0; studentIdx < classLength; studentIdx++) {
+    		Student student = this.classList.get(studentIdx);
+    		String[] studentCourses = {student.courseOne, student.courseTwo,
+    		                            student.courseThree, student.courseFour};
+    		
+    		for (int assessIdx=0; assessIdx < assessmentsLength; assessIdx++) {
+    		String assessmentCourse = Classroom.assessmentsObjects.get(assessIdx).course;
+    		
+    			for (int i = 0; i < studentCourses.length; i++) {
+					String studentCourse = studentCourses[i];
+					
+					if (studentCourse.equals(assessmentCourse)) {
+						subjectAssessmentsForClass.add(Classroom.assessmentsObjects.get(assessIdx));
+					}
+				}
+    		}
+    	}
+    	
+    	for (int a =0; a < subjectAssessmentsForClass.size(); a++) {
+    		//System.out.println(subjectAssessmentsForClass.get(a).course);
+    		subjectAssessmentsForClassSTRINGS
+    		.add(subjectAssessmentsForClass.get(a).course);
+    		
+    	}
+    	
+    	HashMap<String, Integer> numStudentsHavingAssessment = new HashMap<String, Integer>();
+    	int sameCourseIndex = 0;
+    	
+    	
+    	List<String> assessmentCourseNames = new ArrayList<String>(); 
+
+    	
+    	for (int i =0; i < assessmentsLength; i++) {
+    		String assessmentCourse = Classroom.assessmentsObjects.get(i).course;
+
+    		assessmentCourseNames.add(Classroom.assessmentsObjects.get(i).course);
+
+    		int courseFrequencyInAssessments = Collections.frequency(assessmentCourseNames, assessmentCourse);
+    		System.out.println(assessmentCourse + " " + courseFrequencyInAssessments);
+    		
+    	
+    		int countFrequencyOfCourse = 
+    				Collections.frequency(subjectAssessmentsForClassSTRINGS, assessmentCourse);
+    		//System.out.println(assessmentCourse + " " + countFrequencyOfCourse);
+    		
+    		if (courseFrequencyInAssessments != 0) {
+    			numStudentsHavingAssessment.put(assessmentCourse, countFrequencyOfCourse / courseFrequencyInAssessments);
+    		} else {
+    			numStudentsHavingAssessment.put(assessmentCourse, countFrequencyOfCourse);
+    		}
+    			
+    	}
+    	
+    	for (String p : numStudentsHavingAssessment.keySet()) {
+    	      System.out.println("key: " + p + " value: " + numStudentsHavingAssessment.get(p));
+    	    }
+    	
+    	
+    	/*for (int assessIdx=0; assessIdx < assessmentsLength; assessIdx++) {
+    		//String assessmentCourse = Classroom.assessmentsObjects.get(assessIdx).course;
+    		//String subjectAssessmentsCourse = subjectAssessmentsForClass.get(assessIdx).course;
+        	//sameCourseIndex = 0;
+    		
+    		//if (subjectAssessmentsCourse.equals(assessmentCourse))  {
+    			//sameCourseIndex++;	
+    			
+    		}*/
+    	
+    		// add course index to hashmap...
+    	
+ 
+    	//int numStudents = sameCourseIndex / this.assessmentsForClassList.size();
+		
+		//numStudentsHavingAssessment.put(subjectAssessmentsCourse);
+    	
+    } 
+    
     
  }
 	

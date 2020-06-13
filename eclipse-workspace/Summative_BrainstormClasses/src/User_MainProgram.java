@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.sql.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -33,10 +34,10 @@ public class User_MainProgram {
 	//System.out.println(Classroom.assessmentsList);
 	//System.out.println(Classroom.assessmentsObjects.get(0).date);
 	
+	//classroom_Math.addAssessment();
 	classroom_Math.buildClass();
 	classroom_Physics.buildClass();
-	classroom_Physics.displayAssessmentsForClass();
-	//classroom_English.buildClass();
+	classroom_Math.displayAssessmentsForClass();	//classroom_English.buildClass();
 	//System.out.println(classroom_English.classList.size());
 	//System.out.println(classroom_English.teacher.name);
 	
@@ -51,39 +52,23 @@ public class User_MainProgram {
 	//System.out.println(classroom_Physics.classList.size());
 	//classroom_Math.displayAssessmentsForClass();
 
-	classroom_Math.deleteAssessmentForClass();
+	classroom_Math.viewMonthlySchedule();
+	
+	//classroomMath.addAssessment();
+	//Classroom.displayAssessmentsList();
 			
 	//Classroom.writeFiles(studentsFile, assessmentsFile);
-
-	/*
 	
-	while (checkInput) {
-		Scanner enterStudentIndex = new Scanner(System.in);
-    	System.out.println("Select index # to delete student:");
-    	String studentIndex = enterStudentIndex.nextLine();
-    	
-    	try {
-    	
-		if (0 < Integer.parseInt(studentIndex) && 
-				Integer.parseInt(studentIndex) <= (lengthList+1)) {
-			System.out.println("Deleted! " + studentsObjects.
-					get((Integer.parseInt(studentIndex)-1)).studentName);
-			studentsObjects.remove((Integer.parseInt(studentIndex)-1));
-			checkInput = false;
-		} else {
-			System.out.println("Incorrect index.");
-			checkInput = true;
-		}
-    	} catch (NumberFormatException e) {
-    		System.out.println("Incorrect input.");
-    		checkInput = true;
-    	}
-    	*/
+	//Assessment.viewUpcomingAssessments(classroom_Math);
+	//classroom_Math.addAssessment();
+	
 	//System.out.println(Classroom.assessmentsObjects.get(8).date);
 	
-	// Classroom.writeFiles(studentsFile, assessmentsFile);
+	//Classroom.writeFiles(studentsFile, assessmentsFile);
 
-
+	// can model for different grades - need to have diiferent teachers for each grade (or each 
+    // teacher having mutliple grade classes), and multiple course 
+	//  lists for each grade 
 	// IDEAS FOR MAIN PROGRAM 
 	// Programmer inputs classroom which then assigns values for each type. 
 	/*if (classroom_1.teacher.getLogin() == true) { //RUN MAIN PROGRAM 
