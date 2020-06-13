@@ -35,9 +35,9 @@ public class User_MainProgram {
 	//System.out.println(Classroom.assessmentsObjects.get(0).date);
 	
 	//classroom_Math.addAssessment();
-	classroom_Math.buildClass();
-	classroom_Physics.buildClass();
-	classroom_Math.displayAssessmentsForClass();	//classroom_English.buildClass();
+	classroom_Math.addStudentsToClass();
+	classroom_Physics.addStudentsToClass();
+	//classroom_Math.displayAssessmentsForClass();	//classroom_English.buildClass();
 	//System.out.println(classroom_English.classList.size());
 	//System.out.println(classroom_English.teacher.name);
 	
@@ -85,6 +85,10 @@ public class User_MainProgram {
 	// NOTES  - any changes to will only be saved once write() at end....
 	// will not reflect changes until saved
 		
+	// NOT FOR MULTIPLE STREAMS OF CLASSES - hence if the same class with same course is created, 
+	// all assessments will be attributed to same course, only difference is teacher in which assessment
+	// is held towards. 
+	// to do so, modifications would be necessary in Teacher by having subclass which includes 'section', while this class 
 	}
 
 }

@@ -4,10 +4,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
@@ -173,7 +176,7 @@ public class Classroom {// Feature class - manages schedules for class
 	
 	// Assign students to class corresponding to the teacher's subject with 
 	// students who have that course in their time table
-    public void buildClass() {
+    public void addStudentsToClass() {
     	String classSubject = this.teacher.subject; // Classroom subject by teacher 
     	
         // Reads through each students timetable courses 
@@ -257,7 +260,7 @@ public class Classroom {// Feature class - manages schedules for class
     	List<Student> studentsOfClassList = this.classList;
     	
     	if (this.classList.size() == 0) {
-    		this.buildClass();
+    		this.addStudentsToClass();
     	}
     	
     	System.out.println("------- Students in " + this.teacher.subject + " ------");
@@ -301,7 +304,7 @@ public class Classroom {// Feature class - manages schedules for class
     	
     	System.out.println("\n------ Add Assessment ------");
     	try {
-			String date = Assessment.enterDate();
+			String date = Date_Format.enterDate();
 			String course = this.teacher.subject;
 			String teacher = this.teacher.name;
 			String type = Assessment.addType();
@@ -360,9 +363,7 @@ public class Classroom {// Feature class - manages schedules for class
     	this.displayStudentsInClass();
     	int classLength = this.classList.size();
     	int assessmentsLength = Classroom.assessmentsObjects.size();
-    	List<Assessment> subjectAssessmentsForClass = new ArrayList<Assessment>(); 
-    	
-    	List<String> subjectAssessmentsForClassSTRINGS = new ArrayList<String>(); 
+    	List<Assessment> subjectAssessmentsForClass = new ArrayList<Assessment>();
 
     	for (int studentIdx=0; studentIdx < classLength; studentIdx++) {
     		Student student = this.classList.get(studentIdx);
@@ -382,17 +383,18 @@ public class Classroom {// Feature class - manages schedules for class
     		}
     	}
     	
+    	// Displaying # of students who have the same assessment for different 
+    	// classes in the teacher's class
+    	List<String> subjectAssessmentsForClassSTRINGS = new ArrayList<String>(); 
     	for (int a =0; a < subjectAssessmentsForClass.size(); a++) {
     		//System.out.println(subjectAssessmentsForClass.get(a).course);
     		subjectAssessmentsForClassSTRINGS
     		.add(subjectAssessmentsForClass.get(a).course);
     		
     	}
-    	
+    
     	HashMap<String, Integer> numStudentsHavingAssessment = new HashMap<String, Integer>();
     	int sameCourseIndex = 0;
-    	
-    	
     	List<String> assessmentCourseNames = new ArrayList<String>(); 
 
     	
@@ -402,45 +404,61 @@ public class Classroom {// Feature class - manages schedules for class
     		assessmentCourseNames.add(Classroom.assessmentsObjects.get(i).course);
 
     		int courseFrequencyInAssessments = Collections.frequency(assessmentCourseNames, assessmentCourse);
-    		System.out.println(assessmentCourse + " " + courseFrequencyInAssessments);
+    		//System.out.println(assessmentCourse + " " + courseFrequencyInAssessments);
     		
-    	
     		int countFrequencyOfCourse = 
-    				Collections.frequency(subjectAssessmentsForClassSTRINGS, assessmentCourse);
-    		//System.out.println(assessmentCourse + " " + countFrequencyOfCourse);
-    		
+    				Collections.frequency(subjectAssessmentsForClassSTRINGS, assessmentCourse);    		
     		if (courseFrequencyInAssessments != 0) {
     			numStudentsHavingAssessment.put(assessmentCourse, countFrequencyOfCourse / courseFrequencyInAssessments);
     		} else {
     			numStudentsHavingAssessment.put(assessmentCourse, countFrequencyOfCourse);
     		}
-    			
     	}
     	
-    	for (String p : numStudentsHavingAssessment.keySet()) {
-    	      System.out.println("key: " + p + " value: " + numStudentsHavingAssessment.get(p));
-    	    }
+    	List<String> monthDates = Date_Format.getMonthDates();
+    	List<String> setOfDates = new ArrayList<String>();
+    	List<String> uniqueSetOfDates = new ArrayList<String>();
+
     	
-    	
-    	/*for (int assessIdx=0; assessIdx < assessmentsLength; assessIdx++) {
-    		//String assessmentCourse = Classroom.assessmentsObjects.get(assessIdx).course;
-    		//String subjectAssessmentsCourse = subjectAssessmentsForClass.get(assessIdx).course;
-        	//sameCourseIndex = 0;
-    		
-    		//if (subjectAssessmentsCourse.equals(assessmentCourse))  {
-    			//sameCourseIndex++;	
+    	for (int date=0; date < monthDates.size(); date++) {
+    		String currentDate = monthDates.get(date);
+			int x = 0;
+
+
+    		for (int a = 0; a < Classroom.assessmentsObjects.size(); a++) {
+    	    	String assessmentDetails = null;
+
+    			Assessment currentAssessment = Classroom.assessmentsObjects.get(a);
+    			String assessmentDate = currentAssessment.date;
+    			//System.out.println(assessmentDate);
     			
-    		}*/
+    			if (currentDate.equals(assessmentDate)) {
+    				assessmentDetails = "Students with " +currentAssessment.type+ ": "
+    										   + numStudentsHavingAssessment.get(currentAssessment.course)+ " - "
+    										   + currentAssessment.teacher + ", " 
+    										   + currentAssessment.description;
+    				//System.out.println("true!");
+    	    		String dateText = currentDate + " --- " + assessmentDetails;
+    	    		System.out.println(dateText);
+    	    		x++;
+
+    			}
+  
+    	}
+    		if (x == 0) {
+	    		String dateTextDefault = currentDate + " --- " + "NA";
+	    		//setOfDates.add(dateTextDefault);
+	    		System.out.println(dateTextDefault);
+			}     		
+		}
     	
-    		// add course index to hashmap...
     	
+		List<String> newList = new ArrayList<String>(new HashSet<String>(setOfDates));
+
+		//System.out.println(newList);
+		// return dates with NA!!!!!
  
-    	//int numStudents = sameCourseIndex / this.assessmentsForClassList.size();
-		
-		//numStudentsHavingAssessment.put(subjectAssessmentsCourse);
-    	
-    } 
-    
-    
- }
+    }
+}
+
 	

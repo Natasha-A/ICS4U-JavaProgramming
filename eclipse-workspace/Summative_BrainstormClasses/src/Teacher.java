@@ -48,7 +48,7 @@ class Teacher {
 	    	// database, then read into as assesmentsForClass() based on class type 
 	    	System.out.println("\n------ Add Assessment ------");
 	    	try {
-				String date = Assessment.enterDate();
+				String date = Date_Format.enterDate();
 				String course = this.subject;
 				String teacher = this.name;
 				String type = Assessment.addType();
