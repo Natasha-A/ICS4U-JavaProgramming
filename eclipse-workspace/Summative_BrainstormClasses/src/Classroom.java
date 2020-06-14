@@ -24,6 +24,7 @@ public class Classroom {// Feature class - manages schedules for class
     public List<Student> classList = new ArrayList<Student>();  // Students for each class 
     public List<Assessment> assessmentsForClassList = new ArrayList<Assessment>();  // assessments for each class 
     static LocalDateTime today = LocalDateTime.now();
+    public List<String> optimalAssessmentDates = null;
     public static String[] coursesGrade11 = {"SPH3U0", "FSP3U0", "ICS3U0", "MCR3U0",
                                                      "ENG3C0", "PAL3O0", "ENG3U0", "SCH3U0",
                                                      "TTJ3C0", "AWP3O0", "TCJ3C0", "AVI3M0",
@@ -303,8 +304,14 @@ public class Classroom {// Feature class - manages schedules for class
     	// database, then read into as assesmentsForClass() based on class type 
     	
     	System.out.println("\n------ Add Assessment ------");
+    	
+    	String date = null; 
     	try {
-			String date = Date_Format.enterDate();
+    		// display optimal list, if yes, use for object creation, no use dates... 
+			date = this.displayOptimalAssessmentDates(); 
+			if ((date.equals("NA"))) {
+				date = Date_Format.enterDate();
+			}
 			String course = this.teacher.subject;
 			String teacher = this.teacher.name;
 			String type = Assessment.addType();
@@ -360,7 +367,6 @@ public class Classroom {// Feature class - manages schedules for class
     }
     
     public void viewMonthlySchedule() {
-    	this.displayStudentsInClass();
     	int classLength = this.classList.size();
     	int assessmentsLength = Classroom.assessmentsObjects.size();
     	List<Assessment> subjectAssessmentsForClass = new ArrayList<Assessment>();
@@ -397,7 +403,6 @@ public class Classroom {// Feature class - manages schedules for class
     	int sameCourseIndex = 0;
     	List<String> assessmentCourseNames = new ArrayList<String>(); 
 
-    	
     	for (int i =0; i < assessmentsLength; i++) {
     		String assessmentCourse = Classroom.assessmentsObjects.get(i).course;
 
@@ -417,13 +422,12 @@ public class Classroom {// Feature class - manages schedules for class
     	
     	List<String> monthDates = Date_Format.getMonthDates();
     	List<String> setOfDates = new ArrayList<String>();
-    	List<String> uniqueSetOfDates = new ArrayList<String>();
+    	List<String> notAssignedDates = new ArrayList<String>();
 
-    	
+    	System.out.println("\n------ Calendar for " + today.getMonth() + " for Students in Class -----");
     	for (int date=0; date < monthDates.size(); date++) {
     		String currentDate = monthDates.get(date);
 			int x = 0;
-
 
     		for (int a = 0; a < Classroom.assessmentsObjects.size(); a++) {
     	    	String assessmentDetails = null;
@@ -437,28 +441,69 @@ public class Classroom {// Feature class - manages schedules for class
     										   + numStudentsHavingAssessment.get(currentAssessment.course)+ " - "
     										   + currentAssessment.teacher + ", " 
     										   + currentAssessment.description;
-    				//System.out.println("true!");
     	    		String dateText = currentDate + " --- " + assessmentDetails;
     	    		System.out.println(dateText);
     	    		x++;
-
     			}
-  
-    	}
-    		if (x == 0) {
-	    		String dateTextDefault = currentDate + " --- " + "NA";
-	    		//setOfDates.add(dateTextDefault);
+    		}
+    		
+    	    if (x == 0) {
+	    		String dateTextDefault = currentDate + " --- " + "None assigned.";
 	    		System.out.println(dateTextDefault);
+	    		notAssignedDates.add(currentDate);
+	    		
 			}     		
 		}
+    	this.optimalAssessmentDates = notAssignedDates;
     	
-    	
-		List<String> newList = new ArrayList<String>(new HashSet<String>(setOfDates));
-
-		//System.out.println(newList);
-		// return dates with NA!!!!!
- 
     }
-}
+    
+    public String displayOptimalAssessmentDates() {
+    	this.viewMonthlySchedule();
 
+    	List<String> optimalDates = this.optimalAssessmentDates;
+    	boolean checkDate = true; 
+    	
+    	System.out.println("\n------  Optimal Assessment Dates for " + today.getMonth() + " -----");
+    	for (int x=0; x < optimalDates.size(); x++) {
+    			System.out.println((x+1) + ": "+ optimalDates.get(x));
+    	
+    	}
+    	
+    	// select and return value for date to choose from 
+    	String date = "NA";
+    	while (checkDate) {
+        	System.out.println("\nChoose date from optimal date list? (Enter 'Y' or 'N')");
+
+    		Scanner setDate = new Scanner(System.in);
+        	String addDate = setDate.nextLine();
+        	
+        		if (addDate.equals("Y")) {
+        			try {
+						date = Date_Format.addDate(optimalDates);
+						System.out.println(date);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						System.out.println("Incorrect index.");
+	        			break;
+
+					}
+        			checkDate = false;
+        		} else if (addDate.equals("N")) {
+        	    	date = "NA";
+        			break;
+        			
+        		} else {
+        			System.out.println("Incorrect entry. Enter 'Y' or 'N'.");
+        			checkDate = true;
+        		}
+ 
+    	}
+		return date;
+
+    	
+    }
+    
+
+}
 	

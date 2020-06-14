@@ -26,16 +26,14 @@ public class Date_Format {
 			Scanner setDate = new Scanner(System.in);
 			System.out.println("\nSpecify date for assessment? Enter(Y/N)");
 			String addDate = setDate.nextLine();
+			LocalDateTime today = LocalDateTime.now();
+			DateTimeFormatter currentDate = DateTimeFormatter.ofPattern("dd");
+		    DateTimeFormatter numDateFormat = DateTimeFormatter.ofPattern("e");
 			
 				if (addDate.equals("Y")) {
 					
-					LocalDateTime today = LocalDateTime.now();
-					DateTimeFormatter currentDate = DateTimeFormatter.ofPattern("dd");
 					String dateString = today.format(currentDate);
-					
 					int dateToday = Integer.parseInt(dateString);
-				    
-				    DateTimeFormatter numDateFormat = DateTimeFormatter.ofPattern("e");
 				    
 					for (int indexDate=1; indexDate <= (lastDateOfMonth-dateToday); indexDate++) {
 						LocalDateTime nextDay = today.plusDays(indexDate);
@@ -49,6 +47,7 @@ public class Date_Format {
 						}
 						
 					 }		
+					
 					// Display valid dates (weekdays)
 					System.out.println("\n------ Valid Dates for " + today.getMonth() + " -----");
 				    for (int index=0; index < validDates.size(); index++) {
@@ -58,6 +57,8 @@ public class Date_Format {
 				    date = addDate(validDates);
 				    System.out.println(date);
 					checkDate = false;
+					
+					
 
 				} else if (addDate.equals("N")) {
 					date = formattedDateNextWeek; 

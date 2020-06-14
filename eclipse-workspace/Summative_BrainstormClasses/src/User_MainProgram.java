@@ -53,8 +53,11 @@ public class User_MainProgram {
 	//classroom_Math.displayAssessmentsForClass();
 
 	classroom_Math.viewMonthlySchedule();
+	//classroom_Math.displayOptimalAssessmentDates();
 	
-	//classroomMath.addAssessment();
+	//classroom_Math.addAssessment();
+	classroom_Math.displayAssessmentsForClass();
+
 	//Classroom.displayAssessmentsList();
 			
 	//Classroom.writeFiles(studentsFile, assessmentsFile);
